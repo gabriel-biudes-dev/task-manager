@@ -79,10 +79,10 @@ def findProcess(method, process):
         if p.info[method] == process: list.append(p)
     return list
 
-
 def killProcess(method):
     p = input('Enter the process ' + method + ': ')
     list = findProcess(method, p)
+    if not list: print('No such process was found running on the system')
     for x in list:
         x.kill()
         print('Process ' + p + ' killed')
