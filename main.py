@@ -5,9 +5,11 @@ disk = psutil.disk_usage('/')
 temperatures = psutil.sensors_temperatures()
 users = psutil.users()
 
+#Concerte o valor de byte para gigabyte
 def convert(value):
     return value / 1024 / 1024 / 1024
 
+#Mostra informações da memória 
 def showMemory():
     total_memory = convert(memory.total)
     available_memory = convert(memory.available)
@@ -19,6 +21,7 @@ def showMemory():
     print("Used memory: %.2f" %used_memory + " GB")
     print("Percentage of memory used: " + str(percent_memory) + "%")
 
+#Mostra informações do disco principal 
 def showDisk():
     total_space = convert(disk.total)
     used_space = convert(disk.used)
@@ -31,6 +34,7 @@ def showDisk():
     print("Free space: %.2f" %free_space + " GB")
     print("Percentage of storage used: " + str(percent_space) + "%")
 
+#Mostra a temperatura da CPU
 def showTemperatures():
     print("[CPU TEMPERATURES]")
     for x in temperatures['coretemp']:
@@ -38,6 +42,7 @@ def showTemperatures():
         print(x.current)
         print('')
 
+#Mostra os usuários do sistema
 def showUsers():
     for user in users:
         print("Name: " + user.name)
@@ -45,6 +50,7 @@ def showUsers():
         print("Pid: " + str(user.pid))
         print("")
 
+#Retorna o tamanho da maior string em uma propriedade de uma lista
 def getBigger(list, prop):
     max = 0
     for x in list:
@@ -52,6 +58,7 @@ def getBigger(list, prop):
         if(len(value) > max): max = len(value)
     return max
 
+#Mostra os processos rodando na máquina 
 def showProcesses():
     maxPidSize = getBigger(psutil.process_iter(['pid', 'name', 'username']), 'pid')
     maxNameSize = getBigger(psutil.process_iter(['pid', 'name', 'username']), 'name')
@@ -72,6 +79,7 @@ def showProcesses():
         for x in range(maxUserSize - len(proc.info['username']) + 3): print(' ', end = '')
         print("%.2f" %proc.memory_percent() + "%")
 
+#Retorna uma lista com todos os processos com certo nome ou com certo PID
 def findProcess(method, process):
     list = []
     if method == 'pid': process = int(process)
@@ -79,6 +87,7 @@ def findProcess(method, process):
         if p.info[method] == process: list.append(p)
     return list
 
+#Finaliza um processo
 def killProcess(method):
     p = input('Enter the process ' + method + ': ')
     list = findProcess(method, p)
@@ -87,6 +96,7 @@ def killProcess(method):
         x.kill()
         print('Process ' + p + ' killed')
 
+#Mostra o menu
 def showMenu():
     print("\n1)Show memory status")
     print("2)Show storage status")
